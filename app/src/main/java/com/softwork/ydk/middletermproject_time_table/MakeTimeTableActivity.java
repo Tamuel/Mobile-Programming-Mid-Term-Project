@@ -20,7 +20,7 @@ public class MakeTimeTableActivity extends Activity {
             case R.id.make_time_table_button:
                 EditText editText = (EditText) findViewById(R.id.time_table_name_edit_text);
                 Intent data = new Intent();
-                data.putExtra(TimeTableData.TIME_TABLE_NAME, editText.getText().toString());
+                data.putExtra(TimeTableData.GET_TIME_TABLE_NAME, editText.getText().toString());
                 setResult(TimeTableData.RESULT_OK, data);
                 finish();
                 break;

@@ -2,8 +2,12 @@ package com.softwork.ydk.middletermproject_time_table;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -15,8 +19,6 @@ import android.widget.Toast;
 public class TimeTableActivity extends Activity {
     static public String[] weekDayStrings;
     static public String[] timeStepStrings;
-
-    private String timeTableName;
 
     private Button[] weekDayButtons;
 
@@ -31,9 +33,13 @@ public class TimeTableActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent getData = new Intent(TimeTableActivity.this, MakeTimeTableActivity.class);
-        startActivityForResult(getData, TimeTableData.GET_TIME_TABLE_CODE);
+        ContentResolver cr = getContentResolver();
+        Cursor cur = cr.query(Uri.parse("content://TiMe.softwork.com/lecture"), null, null, null, null);
 
+        if(cur == null) {
+            Intent getData = new Intent(TimeTableActivity.this, MakeTimeTableActivity.class);
+            startActivityForResult(getData, TimeTableData.GET_TIME_TABLE_CODE);
+        }
 
         weekDayLayout = (LinearLayout) findViewById(R.id.week_layout);
         timeTableLayout = (LinearLayout) findViewById(R.id.timeTableOuterLayout);
@@ -49,10 +55,7 @@ public class TimeTableActivity extends Activity {
         for(int i = 0; i < weekDayStrings.length; i++) {
             weekDayButtons[i] = new Button(this);
             weekDayButtons[i].setText(weekDayStrings[i]);
-            if(i != 0)
-                weekDayButtons[i].setBackgroundColor(Color.WHITE);
-            else
-                weekDayButtons[i].setBackgroundColor(Color.argb(0,255,255,255));
+            weekDayButtons[i].setBackground(getResources().getDrawable(R.drawable.day_button));
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -76,8 +79,17 @@ public class TimeTableActivity extends Activity {
         if(requestCode == TimeTableData.GET_TIME_TABLE_CODE) {
             if(resultCode == TimeTableData.RESULT_OK) {
                 TextView tableName = (TextView) findViewById(R.id.time_table_name_text_view);
-                timeTableName = data.getStringExtra(TimeTableData.TIME_TABLE_NAME);
-                tableName.setText(timeTableName);
+                TimeTableData.TIME_TABLE_NAME = data.getStringExtra(TimeTableData.GET_TIME_TABLE_NAME);
+                tableName.setText(TimeTableData.TIME_TABLE_NAME);
+
+                ContentResolver cr = getContentResolver();
+                ContentValues content = new ContentValues();
+
+                content.put(TimeTableDBProvider.LECTURE_NAME, "모바일앱프로그래밍");
+                content.put(TimeTableDBProvider.LECTURE_ROOM, "공대 9호관 408호");
+
+                cr.insert(TimeTableDBProvider.LECTURE_TABLE_CONTENT_URI, content);
+
             }
         }
     }

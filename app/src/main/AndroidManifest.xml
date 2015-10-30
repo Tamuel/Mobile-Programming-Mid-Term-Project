@@ -17,6 +17,10 @@
         </activity>
         <activity android:name=".MakeTimeTableActivity" >
         </activity>
+        <provider
+            android:name=".TimeTableDBProvider"
+            android:authorities="middletermproject_time_table.com"
+            android:exported="true"></provider>
     </application>
 
 </manifest>
