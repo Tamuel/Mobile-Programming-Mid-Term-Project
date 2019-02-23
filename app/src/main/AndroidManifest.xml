@@ -8,19 +8,27 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity android:name=".TimeTableActivity" >
+        <activity android:name=".GUI.TimeTableActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MakeTimeTableActivity" >
+        <activity android:name=".GUI.MakeTimeTableActivity" >
         </activity>
+
         <provider
-            android:name=".TimeTableDBProvider"
-            android:authorities="middletermproject_time_table.com"
-            android:exported="true"></provider>
+            android:name=".Data.TTDBProvider"
+            android:authorities="@string/authority"
+            android:exported="true" />
+
+        <activity android:name=".GUI.LectureActivity" >
+        </activity>
+        <activity android:name=".GUI.AdviceNoteActivity" >
+        </activity>
+        <activity android:name=".GUI.ChooseTimeTableActivity" >
+        </activity>
     </application>
 
 </manifest>
